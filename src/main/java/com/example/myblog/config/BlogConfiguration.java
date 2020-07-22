@@ -23,12 +23,12 @@ public class BlogConfiguration implements ApplicationRunner{
     public void run(ApplicationArguments args) throws Exception {
         User hanmeimei = userRepository.save(new User().setLogin("hanmeimei").setFirstName("meimei").setLastName("han"));
         articleRepository.save(new Article()
-                .setTitle("title1")
+                .setTitle("the title1")
                 .setHeadline("headline1")
                 .setContent("content1")
                 .setAuthor(hanmeimei));
         articleRepository.save(new Article()
-                .setTitle("title2")
+                .setTitle("the title2")
                 .setHeadline("headline2")
                 .setContent("content2")
                 .setAuthor(hanmeimei));
