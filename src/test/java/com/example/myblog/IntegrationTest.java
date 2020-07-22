@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest(classes = {BlogApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BlogApplicationTests {
+class IntegrationTest {
 
     @Autowired
     TestRestTemplate restTemplate;
