@@ -1,5 +1,6 @@
 package com.example.myblog.controller;
 
+import com.example.myblog.config.BlogProperties;
 import com.example.myblog.domain.RenderedArticle;
 import com.example.myblog.entity.Article;
 import com.example.myblog.repository.ArticleRepository;
@@ -18,14 +19,17 @@ import java.util.stream.StreamSupport;
 public class HtmlController {
 
     private final ArticleRepository repository;
+    private final BlogProperties blogProperties;
 
-    public HtmlController(ArticleRepository repository) {
+    public HtmlController(ArticleRepository repository, BlogProperties blogProperties) {
         this.repository = repository;
+        this.blogProperties = blogProperties;
     }
 
     @GetMapping("/")
     public String blog(Model model) {
-        model.addAttribute("title", "Blog");
+        model.addAttribute("title", blogProperties.getTitle());
+        model.addAttribute("banner", blogProperties.getBanner());
         model.addAttribute("articles", StreamSupport.stream(repository.findAllByOrderByAddedAtDesc().spliterator(), true)
                 .map(this::render)
                 .collect(Collectors.toList()));
