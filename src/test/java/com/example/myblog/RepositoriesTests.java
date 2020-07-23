@@ -25,10 +25,10 @@ public class RepositoriesTests {
 
     @Test
     void whenFindByIdOrNull_thenReturnArticle() {
-        User lilei = new User().setLogin("lilei").setFirstName("Lei").setLastName("Li");
-        entityManager.persist(lilei);
+        User leili = new User().setLogin("leili").setFirstName("Lei").setLastName("Li");
+        entityManager.persist(leili);
         Article article = new Article().setTitle("Spring Framework 5.0 goes GA").setHeadline("Dear Spring community ...")
-                .setContent("Lorem ipsum").setAuthor(lilei);
+                .setContent("Lorem ipsum").setAuthor(leili);
         entityManager.persist(article);
         entityManager.flush();
         Article found = articleRepository.findById(article.getId()).orElse(null);
@@ -37,10 +37,10 @@ public class RepositoriesTests {
 
     @Test
     void whenFindByLogin_thenReturnUser() {
-        User lilei = new User().setLogin("lilei").setFirstName("Lei").setLastName("Li");
-        entityManager.persistAndFlush(lilei);
-        User found = userRepository.findByLogin(lilei.getLogin());
-        assertThat(found).isEqualTo(lilei);
+        User leili = new User().setLogin("leili").setFirstName("Lei").setLastName("Li");
+        entityManager.persistAndFlush(leili);
+        User found = userRepository.findByLogin(leili.getLogin());
+        assertThat(found).isEqualTo(leili);
     }
 
     

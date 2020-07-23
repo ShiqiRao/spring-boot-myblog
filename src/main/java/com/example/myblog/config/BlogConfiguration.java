@@ -21,9 +21,9 @@ public class BlogConfiguration implements ApplicationRunner{
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        User hanmeimei = userRepository.save(new User().setLogin("hanmeimei").setFirstName("meimei").setLastName("han"));
+        User hanmeimei = userRepository.save(new User().setLogin("meimeihan").setFirstName("meimei").setLastName("han"));
         articleRepository.save(new Article()
-                .setTitle("the title1")
+                .setTitle("Spring Framework 5.0 goes GA")
                 .setHeadline("headline1")
                 .setContent("content1")
                 .setAuthor(hanmeimei));
