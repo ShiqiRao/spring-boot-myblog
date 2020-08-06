@@ -1,0 +1,45 @@
+{{> header}}
+
+<div class="writing">
+    <b><a href="/">Home</a></b>
+    <form class="to-save">
+        <br> title <br>
+        <input type="text" name="title">
+        <br> headline <br>
+        <input type="text" name="headline">
+        <br> content <br>
+        <textarea rows="10" cols="70" name="content"></textarea>
+        <br>Author:
+        <select name="author">
+            {{#users}}
+                <option value="{{login}}">{{login}}</option>
+            {{/users}}
+        </select>
+        <br>
+        <input type="submit">
+    </form>
+</div>
+
+<script type="text/javascript">
+$("form").submit(function() {
+    //构造请求体
+    var formObject = {};
+    var formArray = $("form").serializeArray();
+    $.each(formArray,
+    function(i, item) {
+        formObject[item.name] = item.value;
+    });
+    //使用AJAX，创建POST请求
+    $.ajax({
+        type: 'POST',
+        url: "/article",
+        data: JSON.stringify(formObject),
+        contentType: 'application/json',
+        success: function(data) {
+            alert(data);
+        }
+    });
+});
+</script>
+
+{{> footer}}
