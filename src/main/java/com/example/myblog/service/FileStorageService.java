@@ -2,10 +2,13 @@ package com.example.myblog.service;
 
 import com.example.myblog.config.FileStorageProperties;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,8 +51,17 @@ public class FileStorageService {
         return fileName;
     }
 
-    public Resource loadFile(String fileName) {
-        //TODO
-        return null;
+    public Resource loadFile(String fileName) throws FileNotFoundException {
+        Path filePath = fileStorageLocation.resolve(fileName).normalize();
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new FileNotFoundException("file not found" + fileName);
+            }
+        } catch (MalformedURLException e) {
+            throw new FileNotFoundException("file not found" + fileName);
+        }
     }
 }
