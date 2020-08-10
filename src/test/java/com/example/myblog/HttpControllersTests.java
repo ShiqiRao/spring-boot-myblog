@@ -1,5 +1,6 @@
 package com.example.myblog;
 
+import com.example.myblog.controller.ArticleController;
 import com.example.myblog.entity.Article;
 import com.example.myblog.entity.User;
 import com.example.myblog.repository.ArticleRepository;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+@WebMvcTest(ArticleController.class)
 public class HttpControllersTests {
 
     @Autowired

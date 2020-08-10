@@ -31,7 +31,7 @@ class IntegrationTest {
         System.out.println(">> Assert blog page title, content and status code");
         ResponseEntity<String> entity = restTemplate.getForEntity("/", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(entity.getBody()).contains("<h1>Blog</h1>", "title1");
+        assertThat(entity.getBody()).contains("<title>Blog</title>", "title1");
     }
 
     @Test

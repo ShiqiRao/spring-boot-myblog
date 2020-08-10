@@ -24,7 +24,7 @@ public class BlogConfiguration implements ApplicationRunner{
         User hanmeimei = userRepository.save(new User().setLogin("meimeihan").setFirstName("meimei").setLastName("han"));
         userRepository.save(new User().setLogin("leili").setFirstName("lei").setLastName("li"));
         articleRepository.save(new Article()
-                .setTitle("Spring Framework 5.0 goes GA")
+                .setTitle("title1")
                 .setHeadline("headline1")
                 .setContent("content1")
                 .setAuthor(hanmeimei));
