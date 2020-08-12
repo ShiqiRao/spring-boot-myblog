@@ -1,24 +1,22 @@
 package com.example.myblog.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/log")
+@Slf4j
 @RestController
 public class LogController {
 
-    Logger logger = LoggerFactory.getLogger(LogController.class);
-
     @GetMapping
     public String justShowSomeLog() {
-        logger.trace("TRACE Message.");
-        logger.debug("DEBUG Message.");
-        logger.info("INFO Message.");
-        logger.warn("WARN Message.");
-        logger.error("ERROR Message.");
+        log.trace("TRACE Message.");
+        log.debug("DEBUG Message.");
+        log.info("INFO Message.");
+        log.warn("WARN Message.");
+        log.error("ERROR Message.");
         return "Bro,go check your console.";
     }
 
