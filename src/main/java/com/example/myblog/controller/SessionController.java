@@ -22,8 +22,8 @@ public class SessionController {
             certificate(response);
             return "success";
         }
-        //登陆失败返回401错误
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        //登陆失败返回错误
+        return "failed";
     }
 
     private boolean authenticate(SessionQuery sessionQuery) {
@@ -34,7 +34,7 @@ public class SessionController {
 
     private void certificate(HttpServletResponse response) {
         //将登陆凭证以cookie的形式返回给客户端
-        Cookie credential = new Cookie("sessionId", "test-info");
+        Cookie credential = new Cookie("sessionId", "test-token");
         response.addCookie(credential);
     }
 
