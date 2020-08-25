@@ -1,7 +1,15 @@
 package com.example.myblog.controller;
 
 import com.example.myblog.domain.ExampleQuery;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 
 @RestController
@@ -51,6 +59,31 @@ public class SimpleRestController {
         return String.format("paramA is :%s,paramB is :%s,paramC is :%s,paramD is :%s,paramE is :%s,paramF is :%s," +
                         "paramG is :%s,paramH is :%s,paramI is :%s,", query.getParamA(), query.getParamB(), query.getParamC(),
                 query.getParamD(), query.getParamE(), query.getParamF(), query.getParamG(), query.getParamH(), query.getParamI());
+    }
+
+    @GetMapping("/greeting")
+    public ResponseEntity<String> greeting() {
+        return new ResponseEntity<>("Hello there.", HttpStatus.OK);
+    }
+
+    @GetMapping("/custom-header")
+    public ResponseEntity<String> customHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Custom-Header", "customHeader");
+        return new ResponseEntity<>("Hello there.", headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/next-birth-day/{year}/{month}/{day}")
+    public ResponseEntity<Long> nextBirthday(@PathVariable int year,@PathVariable int month,@PathVariable int day) {
+        LocalDate birthDate = LocalDate.of(year, month, day);
+        if (birthDate.isAfter(LocalDate.now())) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        LocalDate nextBirthDay = LocalDate.of(LocalDate.now().getYear(), birthDate.getMonth(), birthDate.getDayOfMonth());
+        if (nextBirthDay.isBefore(LocalDate.now())) {
+            nextBirthDay = nextBirthDay.plusYears(1);
+        }
+        return new ResponseEntity<>(DAYS.between(LocalDate.now(), nextBirthDay), HttpStatus.OK);
     }
 
 }

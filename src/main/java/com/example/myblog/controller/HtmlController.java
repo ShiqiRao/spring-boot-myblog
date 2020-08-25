@@ -1,8 +1,8 @@
 package com.example.myblog.controller;
 
 import com.example.myblog.config.BlogProperties;
-import com.example.myblog.domain.SubmitArticleQuery;
 import com.example.myblog.domain.RenderedArticle;
+import com.example.myblog.domain.SubmitArticleQuery;
 import com.example.myblog.entity.Article;
 import com.example.myblog.entity.User;
 import com.example.myblog.repository.ArticleRepository;
@@ -10,6 +10,7 @@ import com.example.myblog.repository.UserRepository;
 import com.example.myblog.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class HtmlController {
 
     @PostMapping("/article")
     @ResponseBody
-    public String submitArticle(@RequestBody SubmitArticleQuery query) {
+    public Article submitArticle(@RequestBody SubmitArticleQuery query) {
         //用于接收POST请求
         User author = userRepository.findByLogin(query.getAuthor());
         if (author == null) {
@@ -72,7 +73,25 @@ public class HtmlController {
                 .setContent(query.getContent())
                 .setSlug(CommonUtil.toSlug(query.getTitle()));
         articleRepository.save(toSave);
-        return "success";
+        return toSave;
+    }
+
+    @PostMapping(value = "/article", headers = "Accept=application/xml", produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public Article submitArticleAndGetXml(@RequestBody SubmitArticleQuery query) {
+        //用于接收POST请求
+        User author = userRepository.findByLogin(query.getAuthor());
+        if (author == null) {
+            //返回400错误码
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user does not exist");
+        }
+        Article toSave = new Article().setAuthor(author)
+                .setTitle(query.getTitle())
+                .setHeadline(query.getHeadline())
+                .setContent(query.getContent())
+                .setSlug(CommonUtil.toSlug(query.getTitle()));
+        articleRepository.save(toSave);
+        return toSave;
     }
 
     private RenderedArticle render(Article article) {
