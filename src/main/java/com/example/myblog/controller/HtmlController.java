@@ -7,12 +7,14 @@ import com.example.myblog.entity.Article;
 import com.example.myblog.entity.User;
 import com.example.myblog.repository.ArticleRepository;
 import com.example.myblog.repository.UserRepository;
+import com.example.myblog.service.ArticleService;
 import com.example.myblog.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +28,7 @@ public class HtmlController {
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
     private final BlogProperties blogProperties;
+    private final ArticleService articleService;
 
     @GetMapping("/")
     public String blog(Model model) {
@@ -58,40 +61,26 @@ public class HtmlController {
         return "writing";
     }
 
-    @PostMapping("/article")
-    @ResponseBody
-    public Article submitArticle(@RequestBody SubmitArticleQuery query) {
-        //用于接收POST请求
-        User author = userRepository.findByLogin(query.getAuthor());
-        if (author == null) {
-            //返回400错误码
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user does not exist");
-        }
-        Article toSave = new Article().setAuthor(author)
-                .setTitle(query.getTitle())
-                .setHeadline(query.getHeadline())
-                .setContent(query.getContent())
-                .setSlug(CommonUtil.toSlug(query.getTitle()));
-        articleRepository.save(toSave);
-        return toSave;
-    }
-
     @PostMapping(value = "/article", headers = "Accept=application/xml", produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
-    public Article submitArticleAndGetXml(@RequestBody SubmitArticleQuery query) {
+    public Article submitArticleAndGetXml(@RequestBody @Validated SubmitArticleQuery query) {
+        return submitArticle(query);
+    }
+
+    @PostMapping("/article")
+    @ResponseBody
+    public Article submitArticleAndGetJson(@RequestBody @Validated SubmitArticleQuery query) {
+        return submitArticle(query);
+    }
+
+    private Article submitArticle(SubmitArticleQuery query) {
         //用于接收POST请求
         User author = userRepository.findByLogin(query.getAuthor());
         if (author == null) {
             //返回400错误码
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user does not exist");
         }
-        Article toSave = new Article().setAuthor(author)
-                .setTitle(query.getTitle())
-                .setHeadline(query.getHeadline())
-                .setContent(query.getContent())
-                .setSlug(CommonUtil.toSlug(query.getTitle()));
-        articleRepository.save(toSave);
-        return toSave;
+        return articleService.saveArticle(query, author);
     }
 
     private RenderedArticle render(Article article) {
