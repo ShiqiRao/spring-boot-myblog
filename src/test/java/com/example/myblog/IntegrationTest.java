@@ -62,7 +62,6 @@ class IntegrationTest {
         ResponseEntity<String> entity2 = restTemplate.postForEntity("/article", queryFromLeili, String.class);
         //正常的返回结果
         assertThat(entity2.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(entity2.getBody()).contains("success");
     }
 
     @AfterAll
